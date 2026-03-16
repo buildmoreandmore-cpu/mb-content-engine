@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080,height=1920">
+<title>Trial Reel 3 — Build Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#080808;font-family:'Space Mono',monospace;color:#F5F5F0;}
+
+.logo{position:fixed;top:48px;left:48px;z-index:100;font-family:'Bebas Neue',sans-serif;font-size:48px;color:#F5F5F0;letter-spacing:2px;opacity:0.85;}
+.logo span{color:#00FF85;}
+.corner{position:fixed;z-index:90;width:50px;height:50px;border-color:#00FF85;border-style:solid;border-width:0;}
+.corner.tl{top:32px;left:32px;border-top-width:3px;border-left-width:3px;}
+.corner.br{bottom:32px;right:32px;border-bottom-width:3px;border-right-width:3px;}
+.bottom-bar{position:fixed;bottom:0;left:0;width:100%;height:5px;background:#00FF85;z-index:100;}
+
+.scene{position:absolute;top:0;left:0;width:1080px;height:1920px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transition:opacity 0.5s;}
+.scene.active{opacity:1;}
+
+/* SCENE 1 */
+.hook-label{font-size:22px;color:#00FF85;text-transform:uppercase;letter-spacing:8px;margin-bottom:24px;animation:fadeUp 0.6s 0.3s both;}
+.hook-text{font-family:'Bebas Neue',sans-serif;font-size:80px;line-height:1.05;text-align:center;padding:0 60px;animation:slideIn 0.7s 0.5s both;}
+
+/* SCENE 2: Terminal */
+.terminal{width:800px;background:#0a0a0a;border:1px solid #222;border-radius:16px;overflow:hidden;animation:fadeUp 0.5s 0.3s both;}
+.terminal-bar{background:#1a1a1a;padding:12px 16px;display:flex;gap:8px;}
+.terminal-dot{width:12px;height:12px;border-radius:50%;}
+.terminal-dot.r{background:#ff5f57;}
+.terminal-dot.y{background:#febc2e;}
+.terminal-dot.g{background:#28c840;}
+.terminal-body{padding:24px;font-family:'Space Mono',monospace;font-size:15px;line-height:1.8;}
+.terminal-line{opacity:0;animation:typeLine 0.3s both;}
+.terminal-line .prompt{color:#00FF85;}
+.terminal-line .cmd{color:#F5F5F0;}
+.terminal-line .output{color:#666;}
+.terminal-line .success{color:#00FF85;}
+.terminal-line .highlight{color:#FFD700;}
+
+/* SCENE 3: What it does */
+.feature-grid{display:flex;flex-direction:column;gap:20px;width:700px;}
+.feature-row{display:flex;align-items:center;gap:20px;background:#111;border-radius:16px;padding:20px 24px;animation:fadeUp 0.4s both;}
+.feature-icon{width:48px;height:48px;border-radius:12px;background:#0a1a0f;border:1px solid #00FF85;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.feature-text{font-family:'Inter',sans-serif;}
+.feature-title{font-size:18px;font-weight:600;color:#F5F5F0;}
+.feature-desc{font-size:14px;color:#888;margin-top:4px;}
+
+/* SCENE 4: Live demo feel */
+.demo-frame{width:500px;background:#111;border-radius:20px;padding:28px;border:1px solid #222;animation:fadeUp 0.5s 0.3s both;}
+.demo-header{font-family:'Space Mono',monospace;font-size:12px;color:#00FF85;text-transform:uppercase;letter-spacing:3px;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.demo-live{width:8px;height:8px;border-radius:50%;background:#00FF85;animation:blink 1s infinite;}
+.demo-msg{padding:12px 18px;border-radius:14px;margin-bottom:10px;font-family:'Inter',sans-serif;font-size:15px;line-height:1.4;animation:popIn 0.3s both;}
+.demo-msg.in{background:#1a1a1a;color:#ccc;max-width:80%;}
+.demo-msg.out{background:#00FF85;color:#080808;max-width:80%;margin-left:auto;text-align:right;}
+.demo-msg .ts{font-size:11px;opacity:0.5;margin-top:4px;}
+.demo-caption{font-family:'Bebas Neue',sans-serif;font-size:44px;text-align:center;margin-top:32px;animation:fadeUp 0.5s 2.5s both;}
+
+/* SCENE 5: CTA */
+.cta-text{font-family:'Bebas Neue',sans-serif;font-size:68px;text-align:center;padding:0 60px;line-height:1.1;animation:fadeUp 0.6s 0.3s both;}
+.cta-sub{font-family:'Inter',sans-serif;font-size:22px;color:#888;margin-top:20px;text-align:center;animation:fadeUp 0.5s 0.8s both;}
+.cta-url{font-family:'Space Mono',monospace;font-size:28px;color:#00FF85;margin-top:40px;padding:16px 32px;border:2px solid #00FF85;border-radius:8px;animation:pulse 2s 1.2s infinite;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+@keyframes typeLine{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div class="logo">martin<span>.</span>builds</div>
+<div class="corner tl"></div>
+<div class="corner br"></div>
+<div class="bottom-bar"></div>
+
+<!-- SCENE 1: Hook -->
+<div class="scene active" id="s1">
+  <div class="hook-label">build log</div>
+  <div class="hook-text">I built an AI<br>employee for an<br>HVAC company<br>in 4 days</div>
+</div>
+
+<!-- SCENE 2: Terminal — the build -->
+<div class="scene" id="s2">
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="terminal-dot r"></div>
+      <div class="terminal-dot y"></div>
+      <div class="terminal-dot g"></div>
+    </div>
+    <div class="terminal-body">
+      <div class="terminal-line" style="animation-delay:0.3s"><span class="prompt">→</span> <span class="cmd">Mapped their service flow</span></div>
+      <div class="terminal-line" style="animation-delay:0.6s"><span class="output">  Emergency calls, quotes, scheduling, follow-ups</span></div>
+      <div class="terminal-line" style="animation-delay:0.9s"><span class="prompt">→</span> <span class="cmd">Trained agent on 47 service types</span></div>
+      <div class="terminal-line" style="animation-delay:1.2s"><span class="output">  AC repair, furnace install, duct cleaning, etc.</span></div>
+      <div class="terminal-line" style="animation-delay:1.5s"><span class="prompt">→</span> <span class="cmd">Connected to their calendar</span></div>
+      <div class="terminal-line" style="animation-delay:1.8s"><span class="output">  Real-time availability, auto-books service windows</span></div>
+      <div class="terminal-line" style="animation-delay:2.1s"><span class="prompt">→</span> <span class="cmd">Deployed to website + SMS</span></div>
+      <div class="terminal-line" style="animation-delay:2.4s"><span class="success">  ✓ LIVE — responding to customers now</span></div>
+      <div class="terminal-line" style="animation-delay:2.7s"><span class="highlight">  Total build time: 4 days</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 3: What it does -->
+<div class="scene" id="s3">
+  <div class="feature-grid">
+    <div class="feature-row" style="animation-delay:0.3s">
+      <div class="feature-icon">🔥</div>
+      <div class="feature-text">
+        <div class="feature-title">Emergency triage</div>
+        <div class="feature-desc">Detects "no heat" or "gas smell" → priority dispatch</div>
+      </div>
+    </div>
+    <div class="feature-row" style="animation-delay:0.6s">
+      <div class="feature-icon">📅</div>
+      <div class="feature-text">
+        <div class="feature-title">Auto-scheduling</div>
+        <div class="feature-desc">Books service windows from real calendar availability</div>
+      </div>
+    </div>
+    <div class="feature-row" style="animation-delay:0.9s">
+      <div class="feature-icon">💬</div>
+      <div class="feature-text">
+        <div class="feature-title">Quote estimates</div>
+        <div class="feature-desc">Gives ballpark pricing based on service type + unit age</div>
+      </div>
+    </div>
+    <div class="feature-row" style="animation-delay:1.2s">
+      <div class="feature-icon">📱</div>
+      <div class="feature-text">
+        <div class="feature-title">SMS follow-up</div>
+        <div class="feature-desc">Texts customer after service for review + referral</div>
+      </div>
+    </div>
+    <div class="feature-row" style="animation-delay:1.5s">
+      <div class="feature-icon">🌙</div>
+      <div class="feature-text">
+        <div class="feature-title">After-hours coverage</div>
+        <div class="feature-desc">11 PM emergency? Agent handles it. Owner sleeps.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 4: Live demo -->
+<div class="scene" id="s4">
+  <div class="demo-header"><div class="demo-live"></div> LIVE — HVAC Agent</div>
+  <div class="demo-frame">
+    <div class="demo-msg in" style="animation-delay:0.4s">
+      My AC stopped blowing cold air. It's 95 degrees. Can someone come today?
+      <div class="ts">Customer · 2:47 PM</div>
+    </div>
+    <div class="demo-msg out" style="animation-delay:1s">
+      I'm sorry about that! Based on your description, this sounds like it could be a refrigerant or compressor issue. I have a tech available today at 4:30 PM. Want me to book that?
+      <div class="ts">AI Agent · 2:47 PM</div>
+    </div>
+    <div class="demo-msg in" style="animation-delay:1.6s">
+      Yes please! What's the service call fee?
+      <div class="ts">Customer · 2:48 PM</div>
+    </div>
+    <div class="demo-msg out" style="animation-delay:2.2s">
+      $89 diagnostic fee, waived if you proceed with repair. Booked for 4:30 PM ✅ You'll get a text when the tech is on the way.
+      <div class="ts">AI Agent · 2:48 PM</div>
+    </div>
+  </div>
+  <div class="demo-caption">Booked in 60 seconds. No hold music.</div>
+</div>
+
+<!-- SCENE 5: CTA -->
+<div class="scene" id="s5">
+  <div class="cta-text">Your competitors<br>are still using<br>voicemail</div>
+  <div class="cta-sub">Get an AI employee working for your business this week.</div>
+  <div class="cta-url">martinbuilds.ai</div>
+</div>
+
+<script>
+const scenes = document.querySelectorAll('.scene');
+let current = 0;
+const durations = [3500, 5500, 5000, 5500, 4000];
+
+function next() {
+  if (current >= scenes.length - 1) return;
+  scenes[current].classList.remove('active');
+  current++;
+  scenes[current].classList.add('active');
+  setTimeout(next, durations[current]);
+}
+setTimeout(next, durations[0]);
+</script>
+</body>
+</html>

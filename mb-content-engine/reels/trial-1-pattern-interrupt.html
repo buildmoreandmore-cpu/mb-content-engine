@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080,height=1920">
+<title>Trial Reel 1 — Pattern Interrupt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#080808;font-family:'Space Mono',monospace;color:#F5F5F0;}
+
+.logo{position:fixed;top:48px;left:48px;z-index:100;font-family:'Bebas Neue',sans-serif;font-size:48px;color:#F5F5F0;letter-spacing:2px;opacity:0.85;}
+.logo span{color:#00FF85;}
+.corner{position:fixed;z-index:90;width:50px;height:50px;border-color:#00FF85;border-style:solid;border-width:0;}
+.corner.tl{top:32px;left:32px;border-top-width:3px;border-left-width:3px;}
+.corner.br{bottom:32px;right:32px;border-bottom-width:3px;border-right-width:3px;}
+.bottom-bar{position:fixed;bottom:0;left:0;width:100%;height:5px;background:#00FF85;z-index:100;}
+
+.scene{position:absolute;top:0;left:0;width:1080px;height:1920px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transition:opacity 0.5s;}
+.scene.active{opacity:1;}
+
+/* SCENE 1: Hook */
+.hook-label{font-size:22px;color:#00FF85;text-transform:uppercase;letter-spacing:8px;margin-bottom:24px;animation:fadeUp 0.6s 0.3s both;}
+.hook-text{font-family:'Bebas Neue',sans-serif;font-size:88px;line-height:1.05;text-align:center;padding:0 60px;animation:slideIn 0.7s 0.5s both;}
+
+/* SCENE 2: The Problem — Phone mockup */
+.phone-frame{width:420px;height:740px;border:3px solid #333;border-radius:40px;overflow:hidden;background:#111;padding:20px;display:flex;flex-direction:column;animation:fadeUp 0.6s 0.3s both;}
+.phone-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #222;}
+.phone-dot{width:10px;height:10px;border-radius:50%;background:#00FF85;}
+.phone-title{font-size:16px;color:#888;font-family:'Inter',sans-serif;}
+.notif{background:#1a1a1a;border-radius:16px;padding:16px 20px;margin-bottom:10px;font-family:'Inter',sans-serif;font-size:15px;color:#ccc;border-left:3px solid #333;animation:slideNotif 0.4s both;}
+.notif.missed{border-left-color:#ff4444;}
+.notif .time{font-size:12px;color:#666;margin-top:6px;}
+.notif .label{font-size:11px;color:#ff4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.problem-caption{font-family:'Bebas Neue',sans-serif;font-size:52px;text-align:center;margin-top:40px;animation:fadeUp 0.5s 1.5s both;}
+.problem-sub{font-family:'Inter',sans-serif;font-size:22px;color:#888;text-align:center;margin-top:12px;animation:fadeUp 0.5s 1.8s both;}
+
+/* SCENE 3: The Fix — Chat conversation */
+.chat-frame{width:460px;background:#111;border-radius:24px;padding:24px;animation:fadeUp 0.5s 0.3s both;}
+.chat-bubble{padding:14px 20px;border-radius:18px;margin-bottom:12px;max-width:85%;font-family:'Inter',sans-serif;font-size:16px;line-height:1.5;animation:popIn 0.3s both;}
+.chat-bubble.customer{background:#1a1a1a;color:#ccc;align-self:flex-start;border-bottom-left-radius:4px;}
+.chat-bubble.agent{background:#00FF85;color:#080808;align-self:flex-end;margin-left:auto;border-bottom-right-radius:4px;display:block;text-align:right;}
+.chat-bubble .name{font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;opacity:0.6;}
+.fix-caption{font-family:'Bebas Neue',sans-serif;font-size:52px;text-align:center;margin-top:40px;animation:fadeUp 0.5s 2s both;}
+.agent-tag{display:inline-block;background:#00FF85;color:#080808;font-size:13px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:16px;font-family:'Inter',sans-serif;animation:fadeUp 0.4s 0.2s both;}
+
+/* SCENE 4: Numbers */
+.stat-row{display:flex;gap:40px;margin-bottom:40px;}
+.stat{text-align:center;animation:fadeUp 0.5s both;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:96px;color:#00FF85;line-height:1;}
+.stat-label{font-family:'Inter',sans-serif;font-size:18px;color:#888;margin-top:8px;}
+.numbers-caption{font-family:'Inter',sans-serif;font-size:24px;color:#ccc;text-align:center;animation:fadeUp 0.5s 1s both;}
+
+/* SCENE 5: CTA */
+.cta-text{font-family:'Bebas Neue',sans-serif;font-size:72px;text-align:center;padding:0 60px;line-height:1.1;animation:fadeUp 0.6s 0.3s both;}
+.cta-sub{font-family:'Inter',sans-serif;font-size:24px;color:#00FF85;margin-top:24px;animation:fadeUp 0.5s 0.8s both;}
+.cta-url{font-family:'Space Mono',monospace;font-size:28px;color:#00FF85;margin-top:40px;padding:16px 32px;border:2px solid #00FF85;border-radius:8px;animation:pulse 2s 1.2s infinite;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+@keyframes slideNotif{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+</style>
+</head>
+<body>
+<div class="logo">martin<span>.</span>builds</div>
+<div class="corner tl"></div>
+<div class="corner br"></div>
+<div class="bottom-bar"></div>
+
+<!-- SCENE 1: Hook -->
+<div class="scene active" id="s1">
+  <div class="hook-label">real talk</div>
+  <div class="hook-text">Your contact form<br>is losing you<br>$2,000/month</div>
+</div>
+
+<!-- SCENE 2: The Problem -->
+<div class="scene" id="s2">
+  <div class="phone-frame">
+    <div class="phone-header">
+      <div class="phone-dot"></div>
+      <div class="phone-title">Missed Leads — This Week</div>
+    </div>
+    <div class="notif missed" style="animation-delay:0.5s">
+      <div class="label">Missed</div>
+      "Hi, I need a quote for dental implants..."
+      <div class="time">Monday 9:47 PM — replied Thursday</div>
+    </div>
+    <div class="notif missed" style="animation-delay:0.9s">
+      <div class="label">Missed</div>
+      "Do you accept Blue Cross insurance?"
+      <div class="time">Tuesday 2:15 PM — no reply</div>
+    </div>
+    <div class="notif missed" style="animation-delay:1.3s">
+      <div class="label">Missed</div>
+      "I'd like to schedule a consultation..."
+      <div class="time">Wednesday 11:30 AM — went to competitor</div>
+    </div>
+  </div>
+  <div class="problem-caption">3 leads. 0 booked.</div>
+  <div class="problem-sub">They went somewhere faster.</div>
+</div>
+
+<!-- SCENE 3: The Fix -->
+<div class="scene" id="s3">
+  <div class="agent-tag">⚡ AI Agent — 11:31 PM</div>
+  <div class="chat-frame">
+    <div class="chat-bubble customer" style="animation-delay:0.4s">
+      <div class="name">Website Visitor</div>
+      Hi, do you do same-day crowns?
+    </div>
+    <div class="chat-bubble agent" style="animation-delay:0.9s">
+      <div class="name">AI Agent</div>
+      Yes! We offer same-day CEREC crowns. I can book you for tomorrow at 10am or 2pm — which works better?
+    </div>
+    <div class="chat-bubble customer" style="animation-delay:1.4s">
+      <div class="name">Website Visitor</div>
+      10am works!
+    </div>
+    <div class="chat-bubble agent" style="animation-delay:1.9s">
+      <div class="name">AI Agent</div>
+      Done ✅ Confirmation sent to your email. See you tomorrow!
+    </div>
+  </div>
+  <div class="fix-caption">11:31 PM. Booked in 40 seconds.</div>
+</div>
+
+<!-- SCENE 4: Numbers -->
+<div class="scene" id="s4">
+  <div class="stat-row">
+    <div class="stat" style="animation-delay:0.3s">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Always responding</div>
+    </div>
+    <div class="stat" style="animation-delay:0.6s">
+      <div class="stat-num">&lt;30s</div>
+      <div class="stat-label">Average reply time</div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="stat" style="animation-delay:0.9s">
+      <div class="stat-num">3x</div>
+      <div class="stat-label">More leads booked</div>
+    </div>
+  </div>
+  <div class="numbers-caption">While you sleep. While you're with patients.</div>
+</div>
+
+<!-- SCENE 5: CTA -->
+<div class="scene" id="s5">
+  <div class="cta-text">Stop losing leads<br>to your inbox</div>
+  <div class="cta-sub">Built and running in one week.</div>
+  <div class="cta-url">martinbuilds.ai</div>
+</div>
+
+<script>
+const scenes = document.querySelectorAll('.scene');
+let current = 0;
+const durations = [3000, 4500, 5000, 4000, 4000];
+
+function next() {
+  if (current >= scenes.length - 1) return;
+  scenes[current].classList.remove('active');
+  current++;
+  scenes[current].classList.add('active');
+  setTimeout(next, durations[current]);
+}
+setTimeout(next, durations[0]);
+</script>
+</body>
+</html>
